@@ -5,9 +5,10 @@ based on friedlyarm's OpenWRT fork
 Since this is a metraTec-internal layer, you may also add machine definitions
 for products based on the NanoPi if necessary.
 
-There is also a generic layer for Allwinder Hx processors
-([meta-allwinder-hx](https://gitlab.com/dimtass/meta-allwinner-hx)), but it only
-supports mainline kernels and U-Boot.
+* There is also a generic layer for Allwinder Hx processors
+  ([meta-allwinder-hx](https://gitlab.com/dimtass/meta-allwinner-hx)), but it only
+  supports mainline kernels and U-Boot.
+* There is also the [meta-sunxi](https://github.com/linux-sunxi/meta-sunxi) layer.
 
 Dependencies
 ============

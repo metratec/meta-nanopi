@@ -1,0 +1,13 @@
+diff --git a/configs/nanopi_h3_defconfig b/configs/nanopi_h3_defconfig
+index 0b0d5b5..2b31d9e 100644
+--- a/configs/nanopi_h3_defconfig
++++ b/configs/nanopi_h3_defconfig
+@@ -12,7 +12,7 @@ CONFIG_I2C1_ENABLE=y
+ CONFIG_I2C2_ENABLE=y
+ CONFIG_R_I2C_ENABLE=y
+ # CONFIG_VIDEO_DE2 is not set
+-CONFIG_DEFAULT_DEVICE_TREE="sun8i-h3-nanopi-m1-plus"
++CONFIG_DEFAULT_DEVICE_TREE="sun8i-h3-nanopi-neo-core"
+ # CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set
+ CONFIG_BOOTCOMMAND="fatload mmc 0:1 ${scriptaddr} boot.scr; source ${scriptaddr}"
+ CONFIG_CONSOLE_MUX=y
