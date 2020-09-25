@@ -23,7 +23,12 @@ KBUILD_DEFCONFIG_nanopi-neo2 = "sunxi_arm64_defconfig"
 KBUILD_DEFCONFIG_nanopi-neo-core = "sunxi_defconfig"
 
 # NOTE: This is what FriendlyWRT's build-kernel.sh does.
-KERNEL_CONFIG_COMMAND = "oe_runmake_call -C ${S} O=${B} ${KBUILD_DEFCONFIG}"
+KERNEL_CONFIG_COMMAND = "oe_runmake_call -C ${S} CC="${KERNEL_CC}" O=${B} ${KBUILD_DEFCONFIG}"
+
+# FIXME: The tweaked KERNEL_CONFIG_COMMAND breaks config fragments,
+# so we patch the in-tree config instead.
+#SRC_URI_append_nanopi-neo-core = " file://nanopi-neo-core.cfg"
+SRC_URI_append_nanopi-neo-core = " file://nanopi-neo-core-cfg.patch"
 
 #SRC_URI += "file://nanopi-neo2.scc \
 #            file://nanopi-neo2.cfg \
