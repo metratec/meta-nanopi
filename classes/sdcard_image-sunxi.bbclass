@@ -29,10 +29,10 @@ IMAGE_ROOTFS_ALIGNMENT = "2048"
 SDIMG_ROOTFS_TYPE ?= "ext4"
 SDIMG_ROOTFS = "${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.${SDIMG_ROOTFS_TYPE}"
 
-IMAGE_DEPENDS_sunxi-sdimg += " \
-			parted-native \
-			mtools-native \
-			dosfstools-native \
+do_image_sunxi_sdimg[depends] += " \
+			parted-native:do_populate_sysroot \
+			mtools-native:do_populate_sysroot \
+			dosfstools-native:do_populate_sysroot \
 			virtual/kernel:do_deploy \
 			virtual/bootloader:do_deploy \
 			"
@@ -70,12 +70,8 @@ IMAGE_CMD_sunxi-sdimg () {
 	if test -n "${KERNEL_DEVICETREE}"; then
 		for DTS_FILE in ${KERNEL_DEVICETREE}; do
 			DTS_BASE_NAME=`basename ${DTS_FILE} | awk -F "." '{print $1}'`
-			if [ -e ${DEPLOY_DIR_IMAGE}/"${KERNEL_IMAGETYPE}-${DTS_BASE_NAME}.dtb" ]; then
-				kernel_bin="`readlink ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${MACHINE}.bin`"
-				kernel_bin_for_dtb="`readlink ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${DTS_BASE_NAME}.dtb | sed "s,$DTS_BASE_NAME,${MACHINE},g;s,\.dtb$,.bin,g"`"
-				if [ $kernel_bin = $kernel_bin_for_dtb ]; then
-					mcopy -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${DTS_BASE_NAME}.dtb ::/${DTS_BASE_NAME}.dtb
-				fi
+			if [ -e ${DEPLOY_DIR_IMAGE}/"${DTS_BASE_NAME}.dtb" ]; then
+				mcopy -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/${DTS_BASE_NAME}.dtb ::/${DTS_BASE_NAME}.dtb
 			fi
 		done
 	fi

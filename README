@@ -1,11 +1,18 @@
-This is a BSP layer for the [NanoPi NEO2](http://wiki.friendlyarm.com/wiki/index.php/NanoPi_NEO2),
-based on friedlyarm's OpenWRT fork
+This is a BSP layer for NanoPi devices based on friedlyarm's OpenWRT fork
 ([FriendlyWrt](http://wiki.friendlyarm.com/wiki/index.php/How_to_Build_FriendlyWrt)).
 
 Since this is a metraTec-internal layer, you may also add machine definitions
 for products based on the NanoPi if necessary.
 
-* There is also a generic layer for Allwinder Hx processors
+The following devices are currently supported:
+
+* [NanoPi Neo Core](http://wiki.friendlyarm.com/wiki/index.php/NanoPi_NEO_Core)
+* [NanoPi NEO2](http://wiki.friendlyarm.com/wiki/index.php/NanoPi_NEO2) **(untested!)**
+
+There are other Yocto layers that may support FriendyARM-based devices.
+They are sometimes useful for porting recipes:
+
+* There is a generic layer for Allwinder Hx processors
   ([meta-allwinder-hx](https://gitlab.com/dimtass/meta-allwinner-hx)), but it only
   supports mainline kernels and U-Boot.
 * There is also the [meta-sunxi](https://github.com/linux-sunxi/meta-sunxi) layer.
@@ -16,22 +23,22 @@ Dependencies
 This layer depends on:
 
   URI: git://git.openembedded.org/bitbake
-  branch: morty
+  branch: thud
 
   URI: git://git.openembedded.org/openembedded-core
   layers: meta
-  branch: morty
+  branch: thud
 
 
 
 Table of Contents
 =================
 
-  I. Building the meta-nanopi-neo2 BSP layer
+  I. Building the meta-nanopi BSP layer
  II. Booting the images in /binary
 
 
-I. Building the meta-nanopi-neo2 BSP layer
+I. Building the meta-nanopi BSP layer
 ========================================
 
 --- replace with specific instructions for your layer ---
@@ -42,18 +49,19 @@ Package (BSP) Downloads' page of the Yocto Project website.
 
 Having done that, and assuming you extracted the BSP tarball contents
 at the top-level of your yocto build tree, you can build a
-nanopi-neo2 image by adding the location of the meta-nanopi-neo2
+nanopi image by adding the location of the meta-nanopi
 layer to bblayers.conf, along with any other layers needed (to access
 common metadata shared between BSPs) e.g.:
 
   yocto/meta-xxxx \
-  yocto/meta-xxxx/meta-nanopi-neo2 \
+  yocto/meta-xxxx/meta-nanopi \
 
-To enable the nanopi-neo2 layer, add the nanopi-neo2 MACHINE to local.conf:
+To enable the nanopi layer, add the nanopi-neo2 or nanopi-neo-core
+MACHINE to local.conf:
 
-  MACHINE ?= "nanopi-neo2"
+  MACHINE ?= "nanopi-neo-core"
 
-You should then be able to build a nanopi-neo2 image as such:
+You should then be able to build a nanopi image as such:
 
   $ source oe-init-build-env
   $ bitbake core-image-sato
@@ -71,41 +79,3 @@ BSPs are present in every release).  Instead of extracting a BSP
 tarball at the top level of your yocto build tree, you can
 equivalently check out the appropriate branch from the meta-xxxx
 repository at the same location.
-
-
-II. Booting the images in /binary
-=================================
-
---- replace with specific instructions for your platform ---
-
-This BSP contains bootable live images, which can be used to directly
-boot Yocto off of a USB flash drive.
-
-Under Linux, insert a USB flash drive.  Assuming the USB flash drive
-takes device /dev/sdf, use dd to copy the live image to it.  For
-example:
-
-# dd if=core-image-sato-nanopi-neo2-20101207053738.hddimg of=/dev/sdf
-# sync
-# eject /dev/sdf
-
-This should give you a bootable USB flash device.  Insert the device
-into a bootable USB socket on the target, and power on.  This should
-result in a system booted to the Sato graphical desktop.
-
-If you want a terminal, use the arrows at the top of the UI to move to
-different pages of available applications, one of which is named
-'Terminal'.  Clicking that should give you a root terminal.
-
-If you want to ssh into the system, you can use the root terminal to
-ifconfig the IP address and use that to ssh in.  The root password is
-empty, so to log in type 'root' for the user name and hit 'Enter' at
-the Password prompt: and you should be in.
-
-----
-
-If you find you're getting corrupt images on the USB (it doesn't show
-the syslinux boot: prompt, or the boot: prompt contains strange
-characters), try doing this first:
-
-# dd if=/dev/zero of=/dev/sdf bs=1M count=512
